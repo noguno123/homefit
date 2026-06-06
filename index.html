@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 홈트레이닝 추천</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="inputScreen" class="screen is-active" aria-labelledby="appTitle">
+      <div class="hero">
+        <p class="eyebrow">AI Home Training</p>
+        <h1 id="appTitle">AI 홈트레이닝 추천</h1>
+        <p>시간이 부족한 대학생과 직장인을 위한 맞춤형 홈트 추천 서비스</p>
+      </div>
+
+      <form id="preferenceForm" class="panel">
+        <div class="form-group">
+          <h2>운동 목표</h2>
+          <div class="option-grid" data-option-group="goal">
+            <label><input type="radio" name="goal" value="posture" checked><span>자세 교정</span></label>
+            <label><input type="radio" name="goal" value="stretch"><span>스트레칭</span></label>
+            <label><input type="radio" name="goal" value="strength"><span>근력 강화</span></label>
+            <label><input type="radio" name="goal" value="weightLoss"><span>체중 감량</span></label>
+            <label><input type="radio" name="goal" value="cardio"><span>전신 유산소</span></label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>운동 가능 시간</h2>
+          <div class="option-grid time-grid" data-option-group="time">
+            <label><input type="radio" name="timeType" value="5" checked><span>5분</span></label>
+            <label><input type="radio" name="timeType" value="10"><span>10분</span></label>
+            <label><input type="radio" name="timeType" value="20"><span>20분</span></label>
+            <label><input type="radio" name="timeType" value="custom"><span>직접 입력</span></label>
+          </div>
+          <div class="custom-time" id="customTimeWrap">
+            <label for="customTime">원하는 시간</label>
+            <input id="customTime" type="number" min="3" max="60" value="15">
+            <span>분</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>현재 상태</h2>
+          <div class="option-grid">
+            <label><input type="checkbox" name="condition" value="turtleNeck" checked><span>거북목</span></label>
+            <label><input type="checkbox" name="condition" value="backPain"><span>허리 뻐근함</span></label>
+            <label><input type="checkbox" name="condition" value="beginner"><span>운동 초보</span></label>
+            <label><input type="checkbox" name="condition" value="noise"><span>층간소음 걱정</span></label>
+            <label><input type="checkbox" name="condition" value="sitting"><span>장시간 앉아있음</span></label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h2>운동 환경</h2>
+          <div class="option-grid">
+            <label><input type="checkbox" name="environment" value="none" checked><span>장비 없음</span></label>
+            <label><input type="checkbox" name="environment" value="chair"><span>의자 있음</span></label>
+            <label><input type="checkbox" name="environment" value="mat"><span>매트 있음</span></label>
+          </div>
+        </div>
+
+        <button class="primary-button" type="submit">루틴 추천받기</button>
+      </form>
+    </section>
+
+    <section id="resultScreen" class="screen" aria-labelledby="resultTitle">
+      <div class="top-bar">
+        <button class="ghost-button" type="button" data-action="back-to-input">이전</button>
+        <span>추천 결과</span>
+      </div>
+      <div class="section-title">
+        <p class="eyebrow">Recommended Routine</p>
+        <h2 id="resultTitle">오늘의 맞춤 루틴</h2>
+        <p id="selectionSummary"></p>
+      </div>
+      <div id="routineList" class="routine-list"></div>
+      <button id="startRoutineButton" class="primary-button" type="button">운동 시작하기</button>
+    </section>
+
+    <section id="workoutScreen" class="screen" aria-labelledby="workoutName">
+      <div class="top-bar">
+        <button class="ghost-button" type="button" data-action="back-to-result">목록</button>
+        <span id="workoutProgress">1 / 1</span>
+      </div>
+
+      <article class="workout-card">
+        <p class="eyebrow">Now Training</p>
+        <h2 id="workoutName"></h2>
+        <p id="workoutDescription"></p>
+        <div id="workoutSetInfo" class="workout-set-info"></div>
+
+        <div id="videoArea" class="video-area"></div>
+
+        <div class="timer-panel">
+          <div id="timerDisplay" class="timer-display">00:30</div>
+          <div class="timer-buttons">
+            <button class="secondary-button" type="button" data-timer="start">시작</button>
+            <button class="secondary-button" type="button" data-timer="pause">일시정지</button>
+            <button class="secondary-button" type="button" data-timer="reset">초기화</button>
+          </div>
+        </div>
+
+        <div class="bgm-panel">
+          <div>
+            <strong>배경음</strong>
+            <span id="bgmStatus">BGM 켜짐</span>
+          </div>
+          <button class="secondary-button bgm-toggle" type="button" data-action="toggle-bgm">음소거</button>
+          <label class="volume-control" for="bgmVolume">
+            <span>볼륨</span>
+            <input id="bgmVolume" type="range" min="0" max="100" value="45">
+          </label>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="outline-button" type="button" data-action="prev-workout">이전 운동</button>
+          <button class="primary-button" type="button" data-action="next-workout">다음 운동</button>
+        </div>
+      </article>
+
+    </section>
+
+    <section id="completionScreen" class="screen" aria-labelledby="completionTitle">
+      <div class="completion-panel">
+        <p class="eyebrow">Routine Complete</p>
+        <h2 id="completionTitle">오늘의 홈트 완료!</h2>
+        <p id="completionEncouragement" class="completion-copy"></p>
+
+        <div class="completion-stats">
+          <div>
+            <span>총 운동 시간</span>
+            <strong id="completedTotalTime">0분</strong>
+          </div>
+          <div>
+            <span>완료한 운동</span>
+            <strong id="completedExerciseCount">0개</strong>
+          </div>
+        </div>
+
+        <div id="exitMessage" class="exit-message" hidden>
+          이용해주셔서 감사합니다. 브라우저를 닫아주세요.
+        </div>
+
+        <div class="completion-actions">
+          <button class="primary-button" type="button" data-action="restart-app">처음으로 돌아가기</button>
+          <button class="outline-button" type="button" data-action="exit-app">종료</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="ai-disclosure" aria-label="AI 활용 제작 표시">
+    AI를 활용해 제작한 웹앱입니다.
+  </div>
+
+  <audio id="bgmAudio" src="assets/audio/pulse-at-home.mp3" preload="auto" loop></audio>
+  <script src="script.js"></script>
+</body>
+</html>
